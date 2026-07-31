@@ -4,88 +4,99 @@ from model.recurring_task import RecurringTask
 from model.project_task import ProjectTask
 from model.scheduler import Scheduler
 
+
 def main():
+
     print("Adaptive Task Scheduler")
     print()
 
-    #create scheduler
+    # Create scheduler
     scheduler = Scheduler()
 
-    #create Tasks
 
-    #Base Task
+    # Create Tasks
 
     task = Task(
-        "Programming Language Final Project", "2026-07-31 23:59", 10, 300
+        "Programming Language Final Project",
+        "2026-07-31 23:59",
+        10,
+        300
     )
 
-    
-    #Deadline Task
+
     deadline = DeadlineTask(
-        "Submit Assignment", "2026-08-01 11:59 PM", 9, 120
-        )
-    
-   
+        "Submit Assignment",
+        "2026-08-01 11:59 PM",
+        9,
+        120
+    )
 
-    print()
-
-    #Recurring Task
 
     recurring = RecurringTask(
-        "Exercise", "No fixed deadline", 8, 30, "Daily"
+        "Exercise",
+        "No fixed deadline",
+        8,
+        30,
+        "Daily"
     )
 
- 
-
-
-    print()
-   
-
-    #Project Task
 
     project = ProjectTask(
-        "Adaptive Task Scheduler", "2026-07-31", 10, 600
+        "Adaptive Task Scheduler",
+        "2026-07-31",
+        10,
+        600
     )
 
-    print("=== Project Task ===")
 
-    #project progress
-    project.update_progress(25)
-    project.update_progress(30)
-    project.update_progress(45)
+    # Add tasks to scheduler
 
-    print()
-    
-    # Add tasks to the scheduler
     scheduler.add_task(task)
     scheduler.add_task(deadline)
     scheduler.add_task(recurring)
     scheduler.add_task(project)
 
-    print()
 
-    # Display all tasks
-    scheduler.display_tasks()
+    # User Menu
 
-    print("Removing Exercise...\n")
+    while True:
 
-    # Remove one task
-    scheduler.remove_task(recurring)
+        print("\n===== Adaptive Task Scheduler =====")
+        print("1. Display Tasks")
+        print("2. Recommend Task")
+        print("3. Exit")
 
-    print()
+        choice = input("\nEnter your choice: ")
 
-    # Display remaining tasks
-    scheduler.display_tasks()
 
-    recommended = scheduler.recommend_task()
+        if choice == "1":
 
-    if recommended:
-        print("\nRecommended Task:")
-        recommended.display()
-    else:
-        print("\nNo unfinished tasks to recommend.")
+            scheduler.display_tasks()
+
+
+        elif choice == "2":
+
+            recommended = scheduler.recommend_task()
+
+            if recommended:
+                print("\n=== Recommended Task ===")
+                recommended.display()
+
+            else:
+                print("\nNo unfinished tasks to recommend.")
+
+
+        elif choice == "3":
+
+            print("\nGoodbye!")
+            break
+
+
+        else:
+
+            print("\nInvalid choice. Please try again.")
+
 
 
 if __name__ == "__main__":
     main()
-    
