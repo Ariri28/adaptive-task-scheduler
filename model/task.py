@@ -1,3 +1,5 @@
+from datetime import datetime
+
 class Task: 
     def __init__(self, name, deadline, importance, estimated_duration):
         self.name = name

@@ -2,10 +2,16 @@ from model.task import Task
 from model.deadline_task import DeadlineTask
 from model.recurring_task import RecurringTask
 from model.project_task import ProjectTask
+from model.scheduler import Scheduler
 
 def main():
     print("Adaptive Task Scheduler")
     print()
+
+    #create scheduler
+    scheduler = Scheduler()
+
+    #create Tasks
 
     #Base Task
 
@@ -13,23 +19,13 @@ def main():
         "Programming Language Final Project", "2026-07-31 23:59", 10, 300
     )
 
-    print("== Base Task ==")
-
-    task.display()
-
-    task.complete_task()
-
-    task.display()
-
-    print()
-
+    
     #Deadline Task
     deadline = DeadlineTask(
         "Submit Assignment", "2026-08-01 11:59 PM", 9, 120
         )
     
-    print("=== Deadline Task ===")
-    deadline.display()
+   
 
     print()
 
@@ -39,9 +35,8 @@ def main():
         "Exercise", "No fixed deadline", 8, 30, "Daily"
     )
 
-    print("=== Recurring Task ===")
-    recurring.display()
-    recurring.complete_task()
+ 
+
 
     print()
    
@@ -53,13 +48,44 @@ def main():
     )
 
     print("=== Project Task ===")
-    project.display()
 
+    #project progress
     project.update_progress(25)
     project.update_progress(30)
     project.update_progress(45)
 
+    print()
     
+    # Add tasks to the scheduler
+    scheduler.add_task(task)
+    scheduler.add_task(deadline)
+    scheduler.add_task(recurring)
+    scheduler.add_task(project)
+
+    print()
+
+    # Display all tasks
+    scheduler.display_tasks()
+
+    print("Removing Exercise...\n")
+
+    # Remove one task
+    scheduler.remove_task(recurring)
+
+    print()
+
+    # Display remaining tasks
+    scheduler.display_tasks()
+
+    recommended = scheduler.recommend_task()
+
+    if recommended:
+        print("\nRecommended Task:")
+        recommended.display()
+    else:
+        print("\nNo unfinished tasks to recommend.")
+
 
 if __name__ == "__main__":
     main()
+    
