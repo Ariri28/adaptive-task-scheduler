@@ -1,4 +1,6 @@
-from datetime import datetime
+"""
+Base task class representing common task attributes and behavior.
+"""
 
 class Task: 
     def __init__(self, name, deadline, importance, estimated_duration):

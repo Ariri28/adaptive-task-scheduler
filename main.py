@@ -4,6 +4,12 @@ from model.recurring_task import RecurringTask
 from model.project_task import ProjectTask
 from model.scheduler import Scheduler
 
+"""
+Entry point for Adaptive Task Scheduler.
+
+Creates sample tasks, adds them to the Scheduler,
+and provides a command-line interface.
+"""
 
 def main():
 
@@ -14,7 +20,7 @@ def main():
     scheduler = Scheduler()
 
 
-    # Create Tasks
+    # Create Sample Tasks
 
     task = Task(
         "Programming Language Final Project",

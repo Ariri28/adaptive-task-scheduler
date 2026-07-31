@@ -1,17 +1,21 @@
+"""
+    Manages Task objects and provides scheduling operations.
+
+    The Scheduler demonstrates composition by storing different
+    task subclasses and interacting with them through shared behavior.
+"""
+
 class Scheduler:
 
     def __init__(self):
         self.tasks = [] #store all objects managed by scheduler
 
-    #Add task
-
-    def add_task(self, task):
+    def add_task(self, task):  #Add a task object to the scheduler
         self.tasks.append(task) 
         print(f"{task.name} added to scheduler.")
 
-    #Task display
 
-    def display_tasks(self):
+    def display_tasks(self): #Display all tasks currently stored in the scheduler.
         if not self.tasks:
             print("No tasks in the scheduler.")
             return
@@ -23,19 +27,16 @@ class Scheduler:
             task.display()
             print()
 
-    #Removal of existing tasks in scheduler
 
-    def remove_task(self, task):
+    def remove_task(self, task): #Remove an existing task from the scheduler.
         if task in self.tasks:
             self.tasks.remove(task)
             print(f"{task.name} removed from scheduler.")
         else:
             print("Task not found.")
 
-    #High-priority task tracking
 
-    # Recommend the highest-priority unfinished task based on importance.
-    def recommend_task(self):
+    def recommend_task(self):   # Recommend the highest-priority unfinished task based on importance.
         best_task = None
 
         for task in self.tasks:

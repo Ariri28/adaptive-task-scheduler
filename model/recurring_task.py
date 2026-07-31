@@ -1,8 +1,13 @@
 from model.task import Task
 
+"""
+    Represents tasks that repeat according to a defined frequency.
+    Overrides completion behavior to demonstrate polymorphism.
+"""
+
 class RecurringTask(Task):
 
-    def __init__(self, name, deadline, importance, estimated_duration, repeat_frequency ):
+    def __init__(self, name, deadline, importance, estimated_duration, repeat_frequency):
         super().__init__(
             name,
             deadline, 

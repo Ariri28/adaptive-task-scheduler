@@ -2,99 +2,171 @@
 
 ## Overview
 
-Adaptive Task Scheduler is a Python-based productivity system that explores how programming paradigms influence software design.
+Adaptive Task Scheduler is a Python-based productivity application that explores how programming paradigms influence software design.
 
-The project models different task types and uses multiple scheduling strategies to create adaptive task recommendations.
+The project models different types of tasks and uses scheduling logic to organize tasks and provide adaptive recommendations. The goal of Version 1 is to demonstrate object-oriented programming concepts including abstraction, encapsulation, inheritance, polymorphism, and composition through a modular task management system.
 
-## Design Goals
+---
 
-- Demonstrate object-oriented programming concepts.
-- Apply abstraction, encapsulation, inheritance, and polymorphism.
-- Explore functional programming techniques for task analysis.
-- Create a modular and extensible scheduling system.
+# Version 1 Design Goals
 
-## Planned Architecture
+The current implementation focuses on:
 
-The project will contain:
+- Creating a reusable task hierarchy.
+- Demonstrating object-oriented programming principles.
+- Supporting multiple task behaviors through inheritance.
+- Allowing a scheduler to manage different task objects uniformly.
+- Providing task recommendations based on task importance.
+- Creating a command-line interface for user interaction.
+
+---
+
+# Architecture
+
+The current system contains:
 
 - Task models representing different types of tasks.
-- Scheduling strategies for different prioritization methods.
-- Analytics using functional programming concepts.
-- Storage for saving and loading user data.
-- A lightweight reward system.
+- A Scheduler class responsible for managing tasks.
+- Recommendation logic for unfinished tasks.
+- A command-line interface for user interaction.
 
-## Programming Concepts
+The current class structure:
 
-### Object-Oriented Programming
-
-Tasks will be represented as objects with shared behavior through inheritance.
-
-### Polymorphism
-
-Different task types and scheduling strategies will provide their own implementations of behavior.
-
-The scheduler uses polymorphic behaviour by allowing different task subclasses to define their own responses to common actions. For example, all tasks can be completed using the `complete_task()` method, but `RecurringTask` overrides this behaviour to additionally handle recurring schedules.
-
-### Functional Programming
-
-Functional techniques such as map, filter, and lambda expressions will be used for analytics and data processing.
-
-## Project Design Details
-
-### Subclasses of Task 
-
-I made three subclasses.
-
-Each subclass extends the base Task class with additional attributes and behaviours appropriate to its scheduling model. Deadline tasks dynamically increase in urgency, recurring tasks regenerate according to a repetition interval, and project tasks support incremental progress tracking.
-
-                      Task
-                       ▲
-      ┌────────────────┼────────────────┐
-      │                │                │
-DeadlineTask    RecurringTask    ProjectTask
-      │                │                │
-Hard deadline   Repeat interval   Progress tracking
-Increasing       Regenerates      Incremental
-urgency          after completion completion
-
-## Design Considerations and Future Improvements
-
-### Optional Task Attributes
-
-The current version of Adaptive Task Scheduler stores common attributes such as deadlines in the base Task class so that all task types share a consistent structure. This simplifies implementation and allows the scheduler to handle different tasks uniformly.
-
-However, some task types may not naturally require every attribute. For example, DeadlineTask benefits from a strict deadline, while RecurringTask may be better represented through repetition frequency and scheduling preferences rather than a fixed deadline. ProjectTask is more flexible, it may or may not require a deadline depending on the user. 
-
-The project is following a simplified design thus all classes has attributes that aren't necessary for their structure but not utilized
-
-A future version could refactor the design by moving specialized attributes into their respective subclasses:
-
-- `DeadlineTask` → deadline information
-- `RecurringTask` → repeat frequency and recurrence rules
-- `ProjectTask` → progress tracking and milestones
-
-This would create a more flexible architecture while preserving the shared behaviour provided by the base Task class. Currently oversimplified versions showcased.
+                Task
+                 ▲
+  ┌──────────────┼──────────────┐
+  │              │              │
+  Deadline    Recurring        Project
 
 
-## Future Design Details (Extra Tidbits)
+The Scheduler stores different task objects and interacts with them through their shared Task behavior.
 
-- Automatic project progress calculated from milestones or subtasks instead of manual percentage updates.
-- Calendar integration for scheduling recurring and deadline tasks.
-- AI-assisted task prioritization based on workload, deadlines, and user habits.
-- Optional gamification features such as experience points, achievements, and a virtual garden that grows as tasks are completed.
+---
 
-Note: Future versions will parse deadlines into date/time objects so urgency can be incorporated into the recommendation score.
+# Programming Concepts Demonstrated
 
-Future Improvement: When tasks have equal importance, the scheduler will compare parsed deadline values using Python's datetime module to recommend the most urgent task.
+## Object-Oriented Programming
 
-### Project Progress Tracking
+Tasks are represented as objects containing both data and behavior.
 
-In Version 1, project progress is updated manually by the user through the `update_progress()` method. This approach keeps the implementation simple while still allowing long-term tasks to be tracked over multiple work sessions.
+Each task stores information such as:
 
-A future version of the scheduler could replace manual progress updates with milestone-based tracking. Users would be able to divide a project into smaller milestones and mark each milestone as complete. The scheduler would then automatically calculate the project's completion percentage based on the number of completed milestones.
+- Name
+- Deadline
+- Importance
+- Estimated duration
+- Completion status
+
+Methods define task behavior, such as displaying information and completing tasks.
+
+---
+
+## Encapsulation
+
+Task information is stored inside classes rather than being managed directly by the main program.
+
+For example, task completion is handled through methods such as:
+
+```python
+complete_task()
+
+instead of directly modifying internal attributes.
+
+---
+
+## Inheritance
+
+The specialized task classes inherit shared functionality from the base Task class.
+
+The subclasses extend the Task class with additional behavior:
+
+- DeadlineTask represents tasks with fixed deadlines.
+- RecurringTask represents repeated tasks.
+- ProjectTask represents long-term tasks requiring progress tracking.
+
+---
+
+## Polymorphism
+
+Different task subclasses can provide different implementations of the same behavior.
 
 For example:
 
+All tasks contain:
+
+```python
+complete_task()
+```
+
+However, RecurringTask overrides this behavior to handle repeated tasks differently by indicating the next occurrence after completion.
+
+ProjectTask also extends normal task behavior through progress tracking.
+
+---
+
+## Composition
+
+The Scheduler class demonstrates composition by containing a collection of Task objects.
+
+The Scheduler does not need to know the exact subclass type. It can manage DeadlineTask, RecurringTask, and ProjectTask objects through their shared Task interface.
+
+---
+
+# Task Subclass Design
+
+## DeadlineTask
+
+DeadlineTask represents tasks with fixed due dates.
+
+Examples:
+
+- Assignments
+- Exams
+- Project submissions
+
+The current version inherits the shared Task behavior while preserving deadline-specific information.
+
+Future versions may use deadline information to calculate urgency dynamically.
+
+---
+
+## RecurringTask
+
+RecurringTask represents repeated tasks.
+
+Examples:
+
+- Exercise
+- Daily habits
+- Weekly routines
+
+The current version stores a repeat frequency and overrides completion behavior to demonstrate polymorphism.
+
+Future versions may include:
+
+- Advanced recurrence rules.
+- Preferred completion times.
+- Flexible scheduling windows.
+
+---
+
+## ProjectTask
+
+ProjectTask represents larger tasks that require progress tracking.
+
+The current implementation allows users to manually update progress through:
+
+```python
+update_progress()
+```
+
+This allows long-term tasks to be tracked over multiple work sessions.
+
+Future versions may replace manual percentage updates with milestone-based tracking.
+
+Example:
+
+```
 Project: Adaptive Task Scheduler
 
 ☑ Design
@@ -103,71 +175,285 @@ Project: Adaptive Task Scheduler
 ☐ Testing
 ☐ Documentation
 
-Progress: 40% (2 of 5 milestones completed)
+Progress: 40%
+```
 
-This approach would provide a more objective measure of project completion while encouraging users to break large goals into manageable steps.
+The scheduler could automatically calculate progress based on completed milestones.
 
-### User-Customisable Categories
+---
 
-The scheduler is designed to be domain-independent. Rather than hard-coding categories such as "Assignment" or "Meeting" into the class hierarchy, users can organise tasks into their own categories (e.g., Assignments, Homework, Work, Fitness, Chores). The underlying scheduling behaviour remains based on task type (DeadlineTask, RecurringTask, or AnytimeTask), allowing the application to remain flexible for students, professionals, and personal use.
+# Design Considerations
 
-While the scheduler internally classifies tasks by scheduling behaviour (e.g., DeadlineTask, RecurringTask, and AnytimeTask), a future version could allow users to create custom organisational categories such as Assignments, Homework, Meetings, Fitness, or Shopping etc within each (e.g: all these are groups inside DeadlineTask). These categories would improve organisation and navigation without affecting the scheduling algorithm or object-oriented design.
+## Shared Attributes vs Specialized Attributes
 
-### Scheduled Time Windows
+The current version stores common attributes such as deadlines inside the base Task class.
 
-Allow tasks to have an optional preferred start time or time window (e.g., 8:00 AM, 6:00–7:00 PM). Users may keep these times fixed or allow the scheduler to adjust them automatically when generating an optimized daily schedule.
+This creates a consistent structure that allows the Scheduler to manage all tasks uniformly.
 
-### Routine and Timetable Support
+However, some attributes are more naturally associated with specific subclasses.
 
-Recurring tasks can be assigned to preferred times of day, enabling users to build consistent daily or weekly routines. This allows the scheduler to function as both a task manager and a personal timetable planner.
+For example:
 
+- DeadlineTask benefits from strict deadline information.
+- RecurringTask benefits from recurrence rules and scheduling preferences.
+- ProjectTask benefits from milestones and progress tracking.
 
-### Calendar Integration
+The current implementation intentionally uses a simplified design to prioritize demonstrating programming concepts and completing a functional Version 1 prototype.
 
-Integrate the scheduler with a calendar view so tasks can be visualized by day, week, or month. Scheduled tasks would appear alongside deadlines, helping users balance long-term planning with daily execution.
+A future refactor could move specialized attributes into their respective subclasses:
 
-### Printable Daily Schedule
+```
+DeadlineTask
+    -> deadline information
 
-Generate a clean, printable agenda containing prioritized tasks, scheduled time blocks, estimated durations, and available free time. This would provide users with an easy-to-follow plan for the day.
+RecurringTask
+    -> repeat frequency
+    -> recurrence rules
 
-### Flexible Scheduling
+ProjectTask
+    -> milestones
+    -> progress tracking
+```
 
-Allow users to choose between fixed schedules and adaptive schedules. Fixed tasks remain locked to their assigned times, while flexible tasks can be automatically rearranged by the scheduler based on priority, urgency, and available time.
+This would create a more flexible and specialized architecture.
 
-### Hybrid Planning System
+---
 
-Combine deadline-driven tasks, recurring routines, and long-term projects into a single unified schedule. This creates a balance between structured commitments and flexible personal goals while preserving the adaptive nature of the scheduler.
+# Recommendation System
 
-### AI-Assisted Scheduling
+The current scheduler recommends unfinished tasks based on importance.
 
-Integrate AI to provide personalized scheduling recommendations based on user habits, workload, task history, and available time. The system could suggest optimal work sessions, estimate task durations, identify potential scheduling conflicts, and recommend the best task to complete next.
+The current Version 1 implementation uses importance as the main factor for selecting the recommended task.
 
-### Intelligent Priority Suggestions
+Future improvements include:
 
-Instead of requiring users to manually assign importance to every task, AI could analyze task names, deadlines, previous behaviour, and scheduling patterns to recommend an appropriate importance level while still allowing manual adjustments.
+- Deadline urgency calculations.
+- Estimated duration consideration.
+- Workload balancing.
+- Adaptive priority scoring.
 
-### Productivity Insights
+For example, when multiple tasks have equal importance, the scheduler could compare deadline values using Python's datetime module and recommend the most urgent task.
 
-Generate weekly and monthly productivity reports, highlighting completed tasks, focus trends, recurring bottlenecks, and time allocation across different types of work. These insights could help users refine their planning habits over time.
+---
 
-### Virtual Companion and Garden
+# User Interaction
 
-Reward consistent productivity with a relaxing virtual environment where plants, flowers, or small companions grow as tasks are completed. The visual progression serves as positive reinforcement without affecting the scheduling algorithm.
+Version 1 includes a command-line interface that allows users to:
 
-### Gamification System
+- Display current tasks.
+- Request task recommendations.
+- Exit the application.
 
-Introduce experience points (XP), achievement badges, streaks, levels, and milestone rewards for completing tasks and maintaining productive routines. Gamification encourages long-term engagement while preserving the application's primary focus on effective scheduling.
+Future versions may include:
 
-### Focus Sessions
+- Task creation through user input.
+- Task completion through the interface.
+- Editing existing tasks.
+- Saving and loading user data.
 
-Integrate customizable focus timers, such as the Pomodoro Technique or user-defined work intervals. Completing focus sessions could contribute to progress tracking, experience points, and productivity statistics.
+---
 
-### Adaptive Learning
+# Future Design Improvements
 
-The scheduler could gradually learn from user behaviour, recognizing preferred working hours, realistic task durations, and frequently postponed activities. Over time, scheduling recommendations would become increasingly personalized.
+## Routine, Planner, and Scheduler Relationship
 
-### Cross-Platform Synchronization
+The current project is primarily a **Task Scheduler**.
 
-Synchronize tasks across desktop, mobile devices, and cloud storage while integrating with popular calendar applications to maintain a consistent scheduling experience.
+A scheduler answers:
 
-Note: Scheduler vs Planner vs Routine
+> "What should I work on next?"
+
+A planner answers:
+
+> "How should I organize my day, week, or goals?"
+
+A routine answers:
+
+> "What activities should happen consistently?"
+
+Future versions can expand the scheduler into a hybrid planning system by adding:
+
+- Recurring routines.
+- Calendar integration.
+- Daily schedules.
+- Flexible time blocks.
+
+---
+
+## Milestone-Based Project Tracking
+
+A future version could improve ProjectTask by allowing users to divide large projects into smaller milestones.
+
+Instead of manually entering:
+
+```
+Progress = 40%
+```
+
+users could complete milestones:
+
+```
+Project: Adaptive Task Scheduler
+
+☑ Task Model
+☑ Scheduler
+☐ User Interface
+☐ Testing
+☐ Documentation
+```
+
+The system could automatically calculate completion percentage based on completed milestones.
+
+This would provide a more objective measurement of project progress.
+
+---
+
+## Calendar Integration
+
+A future calendar system could display tasks by:
+
+- Day.
+- Week.
+- Month.
+
+This would combine deadlines, routines, and project planning into one view.
+
+---
+
+## Scheduled Time Windows
+
+Tasks could include optional preferred time ranges.
+
+Examples:
+
+```
+Exercise:
+6:00 PM - 7:00 PM
+
+Study:
+8:00 PM - 10:00 PM
+```
+
+Users could choose between:
+
+- Fixed schedules.
+- Flexible schedules where the system automatically adjusts tasks.
+
+---
+
+## Printable Daily Schedule
+
+The scheduler could generate printable agendas containing:
+
+- Prioritized tasks.
+- Time blocks.
+- Estimated durations.
+- Available free time.
+
+---
+
+## AI-Assisted Scheduling
+
+Future AI integration could analyze:
+
+- User habits.
+- Workload.
+- Previous completion patterns.
+- Available time.
+
+Possible features:
+
+- Suggest realistic deadlines.
+- Estimate task duration.
+- Detect scheduling conflicts.
+- Recommend optimized work sessions.
+
+---
+
+## Intelligent Priority Suggestions
+
+Instead of requiring users to manually assign importance, AI could suggest priority levels based on:
+
+- Task description.
+- Deadline.
+- Previous behavior.
+- Historical completion patterns.
+
+Users would still maintain control by adjusting suggestions manually.
+
+---
+
+# Productivity Features
+
+## Virtual Companion and Garden
+
+A future version could include a relaxing productivity environment where completing tasks helps grow:
+
+- Plants.
+- Flowers.
+- Virtual companions.
+
+This provides visual motivation while keeping productivity features separate from scheduling logic.
+
+---
+
+## Gamification System
+
+Possible features include:
+
+- Experience points (XP).
+- Achievement badges.
+- Levels.
+- Productivity streaks.
+- Milestone rewards.
+
+These features encourage consistent progress without replacing the core scheduling system.
+
+---
+
+## Focus Sessions
+
+The scheduler could integrate focus timers such as:
+
+- Pomodoro sessions.
+- Custom work intervals.
+
+Completed focus sessions could contribute toward:
+
+- Project progress.
+- XP.
+- Productivity statistics.
+
+---
+
+## Adaptive Learning
+
+The scheduler could learn from user behavior by recognizing:
+
+- Preferred working hours.
+- Realistic task durations.
+- Frequently delayed tasks.
+
+Over time, recommendations could become more personalized.
+
+---
+
+## Cross-Platform Synchronization
+
+A future version could synchronize tasks across:
+
+- Desktop.
+- Mobile devices.
+- Cloud storage.
+
+Integration with calendar applications would provide a consistent planning experience.
+
+---
+
+# Final Design Vision
+
+Adaptive Task Scheduler aims to grow from a simple task organizer into a personalized productivity assistant.
+
+Version 1 focuses on demonstrating strong programming concepts and a clean architecture.
+
+Future versions expand toward intelligent scheduling, planning assistance, and engaging productivity experiences.
